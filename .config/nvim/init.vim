@@ -1,0 +1,53 @@
+if has("win32")
+	call plug#begin('~/AppData/Local/nvim/plugged')
+else
+	call plug#begin('~/.local/share/nvim/plugged')
+endif
+
+Plug 'itchyny/lightline.vim'
+
+Plug 'scrooloose/nerdtree'
+
+Plug 'godlygeek/tabular'
+
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-commentary'
+
+Plug 'bronson/vim-trailing-whitespace'
+
+Plug 'morhetz/gruvbox'
+
+call plug#end()
+
+set termguicolors
+
+colo gruvbox
+set background=dark
+
+set nocompatible
+syntax enable
+filetype plugin indent on
+
+set number
+set linebreak
+set showmatch
+set novisualbell
+
+set nohlsearch
+set smartcase
+set ignorecase
+set incsearch
+
+set autoindent
+set expandtab
+set shiftwidth=2
+set smarttab
+set softtabstop=2
+
+set ruler
+set ff=unix
+
+set scrolloff=2
+
+set undolevels=1000
+set backspace=indent,eol,start
