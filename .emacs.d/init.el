@@ -14,10 +14,8 @@
           @file-relative-name))
 
 ;; put custom.el settings in own file
-;; (to avoid breaking .emacs.d/init.el)
 
 (setq custom-file (get-fullpath "customization.el"))
-(load custom-file)
 
 ;; don't make backup files
 
@@ -55,8 +53,6 @@
                     (not (gnutls-available-p))))
        (url (concat (if no-ssl "http" "https") "://melpa.org/packages/")))
   (add-to-list 'package-archives (cons "melpa" url) t))
-(when (< emacs-major-version 24)
-  (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
 (package-initialize)
 
 ;; Use Package declarations
@@ -72,22 +68,24 @@
 
 (use-package gruvbox-theme
   :config
-  (load-theme 'gruvbox t))
+  (load-theme 'gruvbox-light-medium t))
 
 (use-package flycheck
   :config
   (global-flycheck-mode))
-
-(use-package powerline
-  :config
-  (powerline-default-theme))
 
 (use-package magit)
 
 (use-package org
   :bind ("C-c a" . org-agenda))
 
-(use-package haskell-mode)
+(use-package haskell-mode
+  :mode "\\.hs\\'")
 
-;; custom keybindings
-(load (get-fullpath "win-mode.el"))
+(use-package rust-mode
+  :mode "\\.rs\\'")
+
+(setq js-indent-level 2)
+
+(with-eval-after-load 'flycheck
+  (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc)))
