@@ -1,0 +1,4 @@
+#!/bin/sh
+
+pandoc -f gfm -t html -s -H ~/.config/pandoc/markdown.css $1 -o $2
+
