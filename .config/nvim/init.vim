@@ -33,6 +33,8 @@ set linebreak
 set showmatch
 set novisualbell
 
+set cursorline
+
 set nohlsearch
 set smartcase
 set ignorecase

@@ -34,6 +34,8 @@
 ;; smooth scrolling
 
 (setq scroll-conservatively 1000)
+(setq mouse-wheel-scroll-amount '(1 ((shift) . 1) ((control . nil))))
+(setq mouse-wheel-progressive-speed nil)
 
 ;; Use visual lines
 
@@ -66,13 +68,20 @@
   :config
   (ido-mode t))
 
+(use-package rich-minority
+  :init (rich-minority-mode 1)
+  :config (setq rm-blacklist ""))
+
 (use-package gruvbox-theme
   :config
   (load-theme 'gruvbox-light-medium t))
 
 (use-package flycheck
   :config
-  (global-flycheck-mode))
+  (global-flycheck-mode)
+  (setq-default
+   flycheck-disabled-checkers
+   '(emacs-lisp-checkdoc)))
 
 (use-package magit)
 
@@ -87,5 +96,20 @@
 
 (setq js-indent-level 2)
 
-(with-eval-after-load 'flycheck
-  (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc)))
+;; Custom keybindings
+
+(global-set-key (kbd "C-x C-k k") 'kill-buffer)
+(global-set-key (kbd "C-x k") 'kill-this-buffer)
+
+;; Enable custom mode
+
+(load (get-fullpath "win-mode.el"))
+
+;; Local changes to mess around with
+
+(let ((local (get-fullpath "local.el")))
+  (unless (file-exists-p local)
+    (with-temp-buffer
+      (insert ";; This file is for local changes")
+      (write-file local)))
+  (load local))
