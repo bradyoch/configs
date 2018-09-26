@@ -2,9 +2,10 @@
 
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
+(menu-bar-mode -1)
 
 (if (eq window-system 'x)
-    (set-frame-font "Inconsolata 13"))
+    (set-frame-font "Inconsolata 12"))
 
 ;; get full path string for relative names
 
