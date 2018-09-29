@@ -17,6 +17,8 @@ Plug 'bronson/vim-trailing-whitespace'
 
 Plug 'morhetz/gruvbox'
 
+Plug 'rhysd/vim-crystal'
+
 call plug#end()
 
 set termguicolors

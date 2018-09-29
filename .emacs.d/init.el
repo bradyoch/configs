@@ -95,16 +95,18 @@
 (use-package rust-mode
   :mode "\\.rs\\'")
 
+(use-package crystal-mode
+  :mode "\\.cr\\'")
+
+(use-package lua-mode
+  :mode "\\.lua\\'")
+
 (setq js-indent-level 2)
 
 ;; Custom keybindings
 
 (global-set-key (kbd "C-x C-k k") 'kill-buffer)
 (global-set-key (kbd "C-x k") 'kill-this-buffer)
-
-;; Enable custom mode
-
-(load (get-fullpath "win-mode.el"))
 
 ;; Local changes to mess around with
 
