@@ -45,7 +45,7 @@ beautiful.init(awful.util.getdir("config") .. "/themes/custom/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
 terminal = "termite"
-editor = os.getenv("EDITOR") or "vim"
+editor = os.getenv("EDITOR") or "nvim"
 editor_cmd = terminal .. " -e " .. editor
 
 -- Default modkey.
@@ -116,7 +116,13 @@ local get_batt = function()
 end
 
 get_batt()
-gears.timer.start_new(10, get_batt)
+gears.timer {
+  timeout = 10,
+  autostart = true,
+  callback = function(out)
+    get_batt()
+  end
+}
 
 -- Create volume widget
 myvol = wibox.widget.textbox()
@@ -239,9 +245,7 @@ end)
 
 -- {{{ Mouse bindings
 root.buttons(gears.table.join(
-    awful.button({ }, 3, function () mymainmenu:toggle() end),
-    awful.button({ }, 4, awful.tag.viewnext),
-    awful.button({ }, 5, awful.tag.viewprev)
+    awful.button({ }, 3, function () mymainmenu:toggle() end)
 ))
 -- }}}
 
@@ -359,6 +363,8 @@ globalkeys = gears.table.join(
       get_vol()
     end),
     awful.key({}, "XF86AudioMute", function() awful.spawn("pamixer -t") end)
+
+    -- Rebind keys
 )
 
 clientkeys = gears.table.join(
@@ -589,7 +595,6 @@ client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_n
 -- {{{ Autostart other services
 local autostart = {
   "compton -b --backend glx --vsync opengl-swc",
-  "xset -b"
 }
 for _, prog in pairs(autostart) do
   awful.spawn(prog);

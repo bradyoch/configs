@@ -17,7 +17,7 @@ Plug 'bronson/vim-trailing-whitespace'
 
 Plug 'morhetz/gruvbox'
 
-Plug 'rhysd/vim-crystal'
+Plug 'zig-lang/zig.vim'
 
 call plug#end()
 
@@ -34,6 +34,8 @@ set number
 set linebreak
 set showmatch
 set novisualbell
+
+set modeline
 
 set cursorline
 

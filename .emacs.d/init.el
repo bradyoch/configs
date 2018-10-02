@@ -49,6 +49,9 @@
                                (set-buffer-file-coding-system
                                 'unix)))
 
+;; Use better dired mode
+(require 'dired-x)
+
 ;; Package info and settings
 
 (require 'package)
