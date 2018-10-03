@@ -78,7 +78,7 @@
 
 (use-package gruvbox-theme
   :config
-  (load-theme 'gruvbox-light-medium t))
+  (load-theme 'gruvbox t))
 
 (use-package flycheck
   :config
@@ -103,6 +103,9 @@
 
 (use-package lua-mode
   :mode "\\.lua\\'")
+
+(use-package zig-mode
+  :mode "\\.zig\\'")
 
 (setq js-indent-level 2)
 

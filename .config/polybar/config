@@ -27,6 +27,64 @@ primary = #ffb52a
 secondary = #e60053
 alert = #bd2c40
 
+;;;
+;;; i3 Window Manger Bar
+;;;
+
+[bar/i3_top]
+;monitor = ${env:MONITOR:HDMI-1}
+width = 100%
+height = 20
+;offset-x = 0%
+;offset-y = 0%
+radius = 0
+fixed-center = false
+
+background = ${colors.background}
+foreground = ${colors.foreground}
+
+line-size = 3
+line-color = #f00
+
+border-size = 0
+border-color = #00000000
+
+padding-left = 0
+padding-right = 2
+
+module-margin-left = 1
+module-margin-right = 2
+
+font-0 = inconsolata:pixelsize=10
+font-1 = notosansmono:pixelsize=10
+
+modules-left = i3
+modules-center =
+modules-right = backlight-acpi pulseaudio wlan battery date
+
+tray-position = right
+tray-padding = 2
+;tray-transparent = true
+;tray-background = #0063ff
+
+;wm-restack = bspwm
+wm-restack = i3
+
+;override-redirect = true
+
+;scroll-up = bspwm-desknext
+;scroll-down = bspwm-deskprev
+
+;scroll-up = i3wm-wsnext
+;scroll-down = i3wm-wsprev
+
+cursor-click = pointer
+cursor-scroll = ns-resize
+
+;;;
+;;; BSPWM Bar
+;;;
+
 [bar/bsp_top]
 ;monitor = ${env:MONITOR:HDMI-1}
 width = 100%
