@@ -21,7 +21,9 @@ Plug 'zig-lang/zig.vim'
 
 call plug#end()
 
-set termguicolors
+if $TERM == "xterm-termite"
+  set termguicolors
+endif
 
 colo gruvbox
 set background=dark

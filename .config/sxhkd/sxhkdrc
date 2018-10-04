@@ -4,7 +4,7 @@
 
 # terminal emulator
 super + Return
-	termite
+	urxvt
 
 # program launcher
 super + @space
@@ -83,6 +83,10 @@ super + {o,i}
 # focus or send to the given desktop
 super + {_,shift + }{1-9,0}
 	bspc {desktop -f,node -d} '^{1-9,10}'
+
+# focus floating windows
+super + shift + @space
+        bspc node any.floating -f
 
 #
 # preselect

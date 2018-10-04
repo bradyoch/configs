@@ -63,7 +63,10 @@
 
 ;; Use Package declarations
 
-(require 'use-package)
+(if (not (require 'use-package nil 'noerror))
+    (progn
+      (package-install 'use-package)
+      (require 'use-package)))
 (setq use-package-always-ensure t)
 
 (use-package ido
@@ -104,15 +107,15 @@
 (use-package lua-mode
   :mode "\\.lua\\'")
 
-(use-package zig-mode
-  :mode "\\.zig\\'")
-
 (setq js-indent-level 2)
 
 ;; Custom keybindings
 
 (global-set-key (kbd "C-x C-k k") 'kill-buffer)
 (global-set-key (kbd "C-x k") 'kill-this-buffer)
+
+(global-set-key (kbd "M-n") 'scroll-up-command)
+(global-set-key (kbd "M-p") 'scroll-down-command)
 
 ;; Local changes to mess around with
 

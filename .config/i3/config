@@ -15,7 +15,7 @@ set $down  j
 set $up    k
 set $right l
 
-set $term termite
+set $term urxvt
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
@@ -177,6 +177,14 @@ bindsym $mod+r mode "resize"
 #         height 18
 # }
 
+#
+# Color Scheme
+#
+
+# class                 border  backgr. text    indicator child_border
+client.focused          #817f7f #285577 #ffffff #2e9ef4   #817f7f
+client.focused_inactive #474645 #5f676a #ffffff #484e50   #474645
+client.unfocused        #30302f #222222 #888888 #292d2e   #30302f
 
 #
 # Custom Keybinds
@@ -203,6 +211,6 @@ gaps outer 4
 # Autostart
 #
 
-exec polybar i3_top
 exec ~/.fehbg
 exec compton -b --backend glx --vsync opengl-swc
+exec polybar i3_top
