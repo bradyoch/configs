@@ -21,7 +21,7 @@ Plug 'zig-lang/zig.vim'
 
 call plug#end()
 
-if $TERM == "xterm-termite"
+if $TERM == "xterm-termite" || $TERM == "st-256color"
   set termguicolors
 endif
 

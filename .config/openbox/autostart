@@ -16,4 +16,6 @@
 #
 #xfce-mcs-manager &
 
-compton -b --backend glx --vsync opengl-swc
+compton -b &
+polybar openbox &
+~/.fehbg &

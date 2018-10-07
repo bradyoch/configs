@@ -40,3 +40,5 @@
 URxvt.scrollBar: false
 URxvt.saveLines: 5000
 URxvt.font:      xft:Inconsolata:pixelsize=14
+
+URxvt.internalBorder: 8

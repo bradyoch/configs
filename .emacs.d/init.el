@@ -1,11 +1,17 @@
-;; visual stuff
+;; remove unneeded gui elements
 
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 (menu-bar-mode -1)
 
+;; if linux set font
+
 (if (eq window-system 'x)
     (set-frame-font "Inconsolata 12"))
+
+;; show the column number as well as row
+
+(column-number-mode 1)
 
 ;; get full path string for relative names
 
@@ -39,8 +45,7 @@
 (setq mouse-wheel-progressive-speed nil)
 
 ;; Use visual lines
-
-(global-visual-line-mode t)
+;; (global-visual-line-mode t)
 
 ;; set EOL to LF and remove trailing whitespace
 
@@ -91,6 +96,9 @@
    '(emacs-lisp-checkdoc)))
 
 (use-package magit)
+
+(use-package multiple-cursors
+  :bind ("C-c s a" . cw/mark-all-like-this))
 
 (use-package org
   :bind ("C-c a" . org-agenda))

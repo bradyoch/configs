@@ -44,7 +44,7 @@ end
 beautiful.init(awful.util.getdir("config") .. "/themes/custom/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
-terminal = "termite"
+terminal = "urxvt"
 editor = os.getenv("EDITOR") or "nvim"
 editor_cmd = terminal .. " -e " .. editor
 
@@ -117,7 +117,7 @@ end
 
 get_batt()
 gears.timer {
-  timeout = 10,
+  timeout = 61,
   autostart = true,
   callback = function(out)
     get_batt()
@@ -131,8 +131,13 @@ local get_vol = function()
   awful.spawn.easy_async({ "pamixer", "--get-volume" },
     function(out)
       myvol.text = "VOL: "..string.sub(out, 1, -2).."%"
-    end
-  )
+    end)
+  awful.spawn.easy_async({ "pamixer", "--get-mute" },
+    function(out)
+      if (out) then
+        myvol.text = myvol.text.." (mute)"
+      end
+    end)
 end
 
 get_vol()
@@ -362,7 +367,10 @@ globalkeys = gears.table.join(
       awful.spawn("pamixer -d 5")
       get_vol()
     end),
-    awful.key({}, "XF86AudioMute", function() awful.spawn("pamixer -t") end)
+    awful.key({}, "XF86AudioMute", function()
+      awful.spawn("pamixer -t")
+      get_vol()
+    end)
 
     -- Rebind keys
 )
@@ -594,7 +602,7 @@ client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_n
 
 -- {{{ Autostart other services
 local autostart = {
-  "compton -b --backend glx --vsync opengl-swc",
+  "compton -b"
 }
 for _, prog in pairs(autostart) do
   awful.spawn(prog);
