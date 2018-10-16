@@ -4,7 +4,7 @@
 
 # terminal emulator
 super + Return
-	urxvt
+	termite
 
 # program launcher
 super + @space
@@ -86,7 +86,7 @@ super + {_,shift + }{1-9,0}
 
 # focus floating windows
 super + shift + @space
-        bspc node any.floating -f
+	bspc node any.floating.!focused -f
 
 #
 # preselect
@@ -130,11 +130,11 @@ super + {Left,Down,Up,Right}
 
 # brightness up
 XF86MonBrightnessUp
-        light -A 5
+	light -A 5
 
 # brightness down
 XF86MonBrightnessDown
-        light -U 5
+	light -U 5
 
 #
 # volume
@@ -142,14 +142,14 @@ XF86MonBrightnessDown
 
 # volume up
 XF86AudioRaiseVolume
-        pamixer -u -i 5
+	pamixer -u -i 5
 
 # volume down
 XF86AudioLowerVolume
-        pamixer -d 5
+	pamixer -d 5
 
 # volume up
 XF86AudioMute
-        pamixer -t
+	pamixer -t
 
-# vim: set ts=8 sw=8:
+# vim: set ts=8 sw=8 noexpandtab:

@@ -39,6 +39,9 @@
 ! Urxvt config
 URxvt.scrollBar: false
 URxvt.saveLines: 5000
-URxvt.font:      xft:Inconsolata:pixelsize=14
+URxvt.font:      xft:Iosevka:size=10
 
-URxvt.internalBorder: 8
+URxvt.internalBorder: 22
+
+! Emac
+emacs.internalBorder: 28

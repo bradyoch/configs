@@ -1,17 +1,25 @@
 ;; remove unneeded gui elements
 
-(tool-bar-mode -1)
-(scroll-bar-mode -1)
 (menu-bar-mode -1)
+(if window-system
+    (progn
+      (tool-bar-mode -1)
+      (scroll-bar-mode -1)))
 
 ;; if linux set font
 
 (if (eq window-system 'x)
-    (set-frame-font "Inconsolata 12"))
+    (set-frame-font "xos4 Terminus 12"))
 
 ;; show the column number as well as row
 
 (column-number-mode 1)
+
+;; start the server if it doesn't exist already
+
+(require 'server)
+(unless (server-running-p)
+    (server-start))
 
 ;; get full path string for relative names
 
@@ -44,9 +52,6 @@
 (setq mouse-wheel-scroll-amount '(1 ((shift) . 1) ((control . nil))))
 (setq mouse-wheel-progressive-speed nil)
 
-;; Use visual lines
-;; (global-visual-line-mode t)
-
 ;; set EOL to LF and remove trailing whitespace
 
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
@@ -55,7 +60,11 @@
                                 'unix)))
 
 ;; Use better dired mode
+
 (require 'dired-x)
+(setq-default dired-omit-files-p t)
+(setq dired-omit-files (concat dired-omit-files "\\|^\\..+$"))
+(setq dired-listing-switches "-alh")
 
 ;; Package info and settings
 
@@ -67,12 +76,16 @@
 (package-initialize)
 
 ;; Use Package declarations
+;; Check if use-package is installed
 
-(if (not (require 'use-package nil 'noerror))
+(if (not (require 'use-package nil 't))
     (progn
       (package-install 'use-package)
       (require 'use-package)))
+
 (setq use-package-always-ensure t)
+
+;; packages to load
 
 (use-package ido
   :init
@@ -85,8 +98,8 @@
   :config (setq rm-blacklist ""))
 
 (use-package gruvbox-theme
-  :config
-  (load-theme 'gruvbox t))
+  :if window-system
+  :config (load-theme 'gruvbox t))
 
 (use-package flycheck
   :config
@@ -97,20 +110,33 @@
 
 (use-package magit)
 
+;; evil mode for when I want vim
+;; (use-package evil
+;;   :config (evil-mode 1))
+
+(use-package god-mode
+  :bind (([escape] . god-local-mode)
+         :map god-local-mode-map
+         ("." . repeat)
+         ("i" . god-local-mode)))
+
 (use-package multiple-cursors
-  :bind ("C-c s a" . cw/mark-all-like-this))
+  :bind (("C-c s a" . mc/mark-all-like-this)
+         ("C-c s n" . mc/mark-next-like-this)
+         ("M-n" . mc/mark-next-lines)
+         ("M-p" . mc/mark-previous-lines)))
 
 (use-package org
-  :bind ("C-c a" . org-agenda))
+  :bind ("C-c a" . org-agenda)
+  :init
+  (add-hook 'org-mode-hook '(lambda () (setq fill-column 80)))
+  (add-hook 'org-mode-hook 'turn-on-auto-fill))
 
 (use-package haskell-mode
   :mode "\\.hs\\'")
 
 (use-package rust-mode
   :mode "\\.rs\\'")
-
-(use-package crystal-mode
-  :mode "\\.cr\\'")
 
 (use-package lua-mode
   :mode "\\.lua\\'")
@@ -121,9 +147,6 @@
 
 (global-set-key (kbd "C-x C-k k") 'kill-buffer)
 (global-set-key (kbd "C-x k") 'kill-this-buffer)
-
-(global-set-key (kbd "M-n") 'scroll-up-command)
-(global-set-key (kbd "M-p") 'scroll-down-command)
 
 ;; Local changes to mess around with
 

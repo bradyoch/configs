@@ -17,8 +17,6 @@ Plug 'bronson/vim-trailing-whitespace'
 
 Plug 'morhetz/gruvbox'
 
-Plug 'zig-lang/zig.vim'
-
 call plug#end()
 
 if $TERM == "xterm-termite" || $TERM == "st-256color"
