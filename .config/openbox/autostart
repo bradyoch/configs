@@ -17,5 +17,4 @@
 #xfce-mcs-manager &
 
 compton -b &
-polybar openbox &
 ~/.fehbg &

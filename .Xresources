@@ -39,7 +39,7 @@
 ! Urxvt config
 URxvt.scrollBar: false
 URxvt.saveLines: 5000
-URxvt.font:      xft:Iosevka:size=10
+URxvt.font:      xft:Inconsolata:size=10
 
 URxvt.internalBorder: 22
 
