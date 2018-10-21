@@ -19,10 +19,7 @@ Plug 'morhetz/gruvbox'
 
 call plug#end()
 
-if $TERM == "xterm-termite" || $TERM == "st-256color"
-  set termguicolors
-endif
-
+set termguicolors
 colo gruvbox
 set background=dark
 
