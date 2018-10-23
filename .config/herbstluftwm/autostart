@@ -24,6 +24,7 @@ hc keybind $Mod-Shift-r reload
 hc keybind $Mod-Shift-c close
 hc keybind $Mod-Return spawn ${TERMINAL:-$Term}
 hc keybind $Mod-space spawn rofi -show run
+hc keybind $Mod-Control-Shift-l spawn systemctl suspend
 
 # basic movement
 # focusing clients

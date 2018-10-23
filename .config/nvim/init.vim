@@ -17,6 +17,8 @@ Plug 'bronson/vim-trailing-whitespace'
 
 Plug 'morhetz/gruvbox'
 
+Plug 'ElmCast/elm-vim'
+
 call plug#end()
 
 set termguicolors
