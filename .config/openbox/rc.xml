@@ -191,6 +191,12 @@
       </action>
     </keybind>
     <!-- Keybindings for snapping applications -->
+    <keybind key="W-Up">
+      <action name="ToggleMaximize"/>
+    </keybind>
+    <keybind key="W-f">
+      <action name="ToggleMaximize"/>
+    </keybind>
     <keybind key="W-Right">
       <action name="if">
         <maximizedvertical>no</maximizedvertical>
@@ -229,7 +235,7 @@
     </keybind>
     <keybind key="W-t">
       <action name="Execute">
-        <command>termite</command>
+        <command>urxvt</command>
       </action>
     </keybind>
     <!-- Brightness Commands -->

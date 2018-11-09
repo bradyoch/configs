@@ -1,0 +1,13 @@
+colorscheme gruvbox
+
+map global user y '<a-|>xclip -i -selection clipboard<ret>'
+map global user p '!xclip -o -selection clipboard<ret>'
+
+set global tabstop 4
+
+hook global WinCreate .*\.html %{ set buffer tabstop 2; set buffer indentwidth 2 }
+
+hook global BufWritePre .* %{ try %{ execute-keys -draft \%s\h+$<ret>d } }
+hook global BufWritePre .* %{ try %{ execute-keys -draft \%@ } }
+
+add-highlighter global/ number-lines

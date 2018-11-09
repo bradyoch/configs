@@ -1,4 +1,4 @@
-;; remove unneeded gui elements
+; remove unneeded gui elements
 
 (menu-bar-mode -1)
 (if window-system
@@ -9,11 +9,15 @@
 ;; if linux set font
 
 (if (eq window-system 'x)
-    (set-frame-font "xos4 Terminus 12"))
+    (set-frame-font "Hack 8"))
 
 ;; show the column number as well as row
 
 (column-number-mode 1)
+
+;; show the line numbers in the border
+
+(linum-mode t)
 
 ;; start the server if it doesn't exist already
 
@@ -73,15 +77,14 @@
                     (not (gnutls-available-p))))
        (url (concat (if no-ssl "http" "https") "://melpa.org/packages/")))
   (add-to-list 'package-archives (cons "melpa" url) t))
-(package-initialize)
 
 ;; Use Package declarations
 ;; Check if use-package is installed
 
-(if (not (require 'use-package nil 't))
-    (progn
-      (package-install 'use-package)
-      (require 'use-package)))
+(package-initialize)
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
 
 (setq use-package-always-ensure t)
 
@@ -108,17 +111,10 @@
    flycheck-disabled-checkers
    '(emacs-lisp-checkdoc)))
 
-(use-package magit)
+(use-package magit
+  :bind (("C-x g" . magit-status)))
 
-;; evil mode for when I want vim
-;; (use-package evil
-;;   :config (evil-mode 1))
-
-(use-package god-mode
-  :bind (([escape] . god-local-mode)
-         :map god-local-mode-map
-         ("." . repeat)
-         ("i" . god-local-mode)))
+(use-package evil)
 
 (use-package multiple-cursors
   :bind (("C-c s a" . mc/mark-all-like-this)
@@ -140,6 +136,9 @@
 
 (use-package lua-mode
   :mode "\\.lua\\'")
+
+(use-package elm-mode
+  :mode "\\.elm\\'")
 
 (setq js-indent-level 2)
 

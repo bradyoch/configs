@@ -14,9 +14,9 @@ local wallpaper_path = os.getenv("HOME").."/Pictures/wallpapers/"
 
 local theme = {}
 
-theme.font          = "Iosevka Bold 9"
+theme.font          = "Hack Bold 8"
 
-theme.wallpaper = wallpaper_path.."background-5.jpg"
+theme.wallpaper = wallpaper_path.."background-1.jpg"
 
 theme.bg_normal     = "#303030"
 theme.bg_focus      = "#535d6c"
@@ -34,7 +34,7 @@ theme.border_width  = dpi(2)
 theme.border_normal = "#000000"
 theme.border_focus  = "#ff9999"
 theme.border_marked = "#91231c"
-theme.border_radius = dpi(8)
+theme.border_radius = dpi(5)
 
 -- There are other variable sets
 -- overriding the default one when

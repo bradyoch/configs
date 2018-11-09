@@ -140,7 +140,7 @@ local taglist_buttons = gears.table.join(
                                                   client.focus:toggle_tag(t)
                                               end
                                           end),
-                    awful.button({ }, 4, function(t) awful.tag.viewnext(t.screen) end),
+                    awful.button({ }, 4, function(t) awful.tagn.viewnext(t.screen) end),
                     awful.button({ }, 5, function(t) awful.tag.viewprev(t.screen) end)
                 )
 
@@ -177,7 +177,7 @@ local function set_wallpaper(s)
         if type(wallpaper) == "function" then
             wallpaper = wallpaper(s)
         end
-        gears.wallpaper.maximized(wallpaper, s, true)
+        gears.wallpaper.maximized(wallpaper, s, false)
     end
 end
 
@@ -253,40 +253,18 @@ globalkeys = gears.table.join(
     awful.key({ modkey,           }, "Escape", awful.tag.history.restore,
               {description = "go back", group = "tag"}),
 
-    -- awful.key({ modkey,           }, "j",
-    --     function ()
-    --         awful.client.focus.byidx( 1)
-    --     end,
-    --     {description = "focus next by index", group = "client"}
-    -- ),
-    -- awful.key({ modkey,           }, "k",
-    --     function ()
-    --         awful.client.focus.byidx(-1)
-    --     end,
-    --     {description = "focus previous by index", group = "client"}
-    -- ),
-    --{{{ Vim like movement
-    awful.key({ modkey, }, "h",
-       function()
-          awful.client.focus.bydirection("left")
-       end,
-       {description = "focus left window", group = "client"}),
-    awful.key({ modkey, }, "j",
-       function()
-          awful.client.focus.bydirection("down")
-       end,
-       {description = "focus lower window", group = "client"}),
-    awful.key({ modkey, }, "k",
-       function()
-          awful.client.focus.bydirection("up")
-       end,
-       {description = "focus upper window", group = "client"}),
-    awful.key({ modkey, }, "l",
-       function()
-          awful.client.focus.bydirection("right")
-       end,
-       {description = "focus right window", group = "client"}),
-    --}}}
+    awful.key({ modkey,           }, "j",
+        function ()
+            awful.client.focus.byidx( 1)
+        end,
+        {description = "focus next by index", group = "client"}
+    ),
+    awful.key({ modkey,           }, "k",
+        function ()
+            awful.client.focus.byidx(-1)
+        end,
+        {description = "focus previous by index", group = "client"}
+    ),
 
     --Main Menu
     awful.key({ modkey,           }, "w", function () mymainmenu:show() end,
@@ -320,17 +298,17 @@ globalkeys = gears.table.join(
     awful.key({ modkey, "Shift"   }, "q", awesome.quit,
               {description = "quit awesome", group = "awesome"}),
 
-    awful.key({ modkey, "Control" }, "l",     function () awful.tag.incmwfact( 0.05)          end,
+    awful.key({ modkey }, "l",     function () awful.tag.incmwfact( 0.05)          end,
               {description = "increase master width factor", group = "layout"}),
-    awful.key({ modkey, "Control" }, "h",     function () awful.tag.incmwfact(-0.05)          end,
+    awful.key({ modkey }, "h",     function () awful.tag.incmwfact(-0.05)          end,
               {description = "decrease master width factor", group = "layout"}),
-    awful.key({ modkey, "Shift"   }, "h",     function () awful.tag.incnmaster( 1, nil, true) end,
+    awful.key({ modkey }, ",",     function () awful.tag.incnmaster( 1, nil, true) end,
               {description = "increase the number of master clients", group = "layout"}),
-    awful.key({ modkey, "Shift"   }, "l",     function () awful.tag.incnmaster(-1, nil, true) end,
+    awful.key({ modkey }, ".",     function () awful.tag.incnmaster(-1, nil, true) end,
               {description = "decrease the number of master clients", group = "layout"}),
-    awful.key({ modkey, }, "i",     function () awful.tag.incncol( 1, nil, true)    end,
+    awful.key({ modkey, "Shift" }, ".",     function () awful.tag.incncol( 1, nil, true)    end,
               {description = "increase the number of columns", group = "layout"}),
-    awful.key({ modkey, }, "o",     function () awful.tag.incncol(-1, nil, true)    end,
+    awful.key({ modkey, "Shift" }, ",",     function () awful.tag.incncol(-1, nil, true)    end,
               {description = "decrease the number of columns", group = "layout"}),
     awful.key({ modkey,           }, "b", function () awful.layout.inc( 1)                end,
               {description = "select next", group = "layout"}),
@@ -552,23 +530,14 @@ client.connect_signal("manage", function (c)
         -- Prevent clients from being unreachable after screen count changes.
         awful.placement.no_offscreen(c)
     end
-
-    -- rounded boarders
-    if not c.fullscreen then
-      c.shape = function(cr, width, height)
-        gears.shape.rounded_rect(cr, width, height, beautiful.border_radius)
-      end
-    end
 end)
 
-client.connect_signal("property::fullscreen", function(c)
-  if c.fullscreen then
-    c.shape = function(cr, width, height) gears.shape.rectangle(cr, width, height) end
-  else
-    c.shape = function(cr, width, height)
-      gears.shape.rounded_rect(cr, width, height, beautiful.border_radius)
+-- Focus follows mouse
+client.connect_signal("mouse::enter", function(c)
+    if awful.layout.get(c.screen) ~= awful.layout.suit.magnifier
+        and awful.client.focus.filter(c) then
+        client.focus = c
     end
-  end
 end)
 
 client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
