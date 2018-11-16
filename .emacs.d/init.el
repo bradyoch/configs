@@ -9,15 +9,19 @@
 ;; if linux set font
 
 (if (eq window-system 'x)
-    (set-frame-font "Hack 8"))
+    (set-frame-font "Hack 7"))
 
 ;; show the column number as well as row
 
 (column-number-mode 1)
 
+;; internal border
+
+(set-frame-parameter nil 'internal-border-width 22)
+
 ;; show the line numbers in the border
 
-(linum-mode t)
+(global-linum-mode t)
 
 ;; start the server if it doesn't exist already
 
@@ -114,7 +118,7 @@
 (use-package magit
   :bind (("C-x g" . magit-status)))
 
-(use-package evil)
+;; (use-package evil)
 
 (use-package multiple-cursors
   :bind (("C-c s a" . mc/mark-all-like-this)
