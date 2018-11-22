@@ -1,13 +1,22 @@
+set global tabstop 2
+set global indentwidth 2
+set global scrolloff 4,0
+
 colorscheme gruvbox
+
+add-highlighter global/ number-lines
 
 map global user y '<a-|>xclip -i -selection clipboard<ret>'
 map global user p '!xclip -o -selection clipboard<ret>'
 
-set global tabstop 4
-
-hook global WinCreate .*\.html %{ set buffer tabstop 2; set buffer indentwidth 2 }
+# Indent with only spaces
+map global insert <tab> '<a-;><gt>'
+map global insert <s-tab> '<a-;><lt>'
 
 hook global BufWritePre .* %{ try %{ execute-keys -draft \%s\h+$<ret>d } }
-hook global BufWritePre .*\..* %{ try %{ execute-keys -draft \%@ } }
+# hook global BufWritePre .*\..* %{ try %{ execute-keys -draft \%@ } }
 
-add-highlighter global/ number-lines
+# Atomic soft tabs
+hook global InsertDelete ' ' %{ try %{
+  execute-keys -draft 'h<a-h><a-k>\A\h+\z<ret>i<space><esc><lt>'
+}}
