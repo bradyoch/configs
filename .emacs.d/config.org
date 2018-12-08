@@ -1,0 +1,163 @@
+#+TITLE: Emacs Configuration (new and improved)
+#+OPTIONS: toc: nil num: nil
+
+* Startup Options
+** Server mode
+
+Start emacs in server mode to use with 'emacsclient'
+
+#+BEGIN_SRC emacs-lisp
+  (require 'server)
+  (unless (server-running-p)
+    (server-start))
+#+END_SRC
+
+** Saving Options
+
+Disable autosaving and backup buffer
+
+#+BEGIN_SRC emacs-lisp
+  (setq make-backup-files nil
+        auto-save-default nil)
+#+END_SRC
+
+** Custom settings
+
+Make custom.el put its junk elsewhere
+
+#+BEGIN_SRC emacs-lisp
+  (setq custom-file (concat
+                     (directory-file-name user-emacs-directory)
+                     "/customization.el"))
+#+END_SRC
+
+* Interface Options
+** GUI Changes
+
+Remove unneeded gui elements from emacs
+
+#+BEGIN_SRC emacs-lisp
+  (menu-bar-mode -1)
+  (if window-system
+      (progn
+        (tool-bar-mode -1)
+        (scroll-bar-mode -1)))
+#+END_SRC
+
+Add a border around the frame to look nice
+
+#+BEGIN_SRC emacs-lisp
+  (set-frame-parameter nil 'internal-border-width 22)
+#+END_SRC
+
+Display the column number in the bar
+
+#+BEGIN_SRC emacs-lisp
+  (column-number-mode 1)
+#+END_SRC
+
+Remove unneeded minor modes from the bar
+
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'after-init-hook
+            (lambda ()
+              (setq minor-mode-alist nil)))
+#+END_SRC
+
+** Font
+
+Setup the font on windows and linux
+
+#+BEGIN_SRC emacs-lisp
+  (cond
+   ((eq window-system 'x)
+    (set-frame-font (font-spec :family "Fira Code" :size 10 :antialias t)))
+   ((eq window-system 'w32)
+    (set-frame-font (font-spec :family "Consolas" :size 10))))
+#+END_SRC
+
+** Startup
+
+Remove the startup buffers
+
+#+BEGIN_SRC emacs-lisp
+  (setq inhibit-startup-message t)
+  (setq initial-scratch-message "")
+#+END_SRC
+** Scrolling
+
+Scroll smoother with the mouse wheel
+
+#+BEGIN_SRC emacs-lisp
+  (setq scroll-conservatively 1000
+        mouse-wheel-scroll-amount '(1 ((shift) . 1) ((control . nil)))
+        mouse-wheel-progressive-speed nil)
+#+END_SRC
+** Theme
+
+Load a reasonable theme
+
+#+BEGIN_SRC emacs-lisp
+  (load-theme 'misterioso t)
+#+END_SRC
+
+* Format Options
+** No tabs
+
+Don't ever use tabs
+
+#+BEGIN_SRC emacs-lisp
+  (setq-default indent-tabs-mode nil)
+#+END_SRC
+
+But if I need to use tabs... looking at you Go
+
+#+BEGIN_SRC emacs-lisp
+  (setq-default tab-width 2)
+#+END_SRC
+
+** On save
+
+Apply some tweaks on save
+
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'before-save-hook 'delete-trailing-whitespace)
+  (add-hook 'before-save-hook '(lambda ()
+                                 (set-buffer-file-coding-system
+                                  'unix)))
+#+END_SRC
+* Packages
+
+Require use-package.el for further package installation
+
+#+BEGIN_SRC emacs-lisp
+  (require 'use-package)
+  (setq use-package-always-ensure t)
+#+END_SRC
+
+** Company Mode
+
+Use company mode for better completion
+
+#+BEGIN_SRC emacs-lisp
+  (use-package company
+    :config
+    (global-company-mode))
+#+END_SRC
+* Keybindings
+
+Let's steal the leader key idea from vim
+
+#+BEGIN_SRC emacs-lisp
+  (defvar-local leader "S-SPC ")
+
+  (global-set-key (kbd (concat leader "x f")) 'find-file)
+  (global-set-key (kbd (concat leader "x s")) 'save-buffer)
+#+END_SRC
+
+Misc. keybindings
+
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-x k") 'kill-this-buffer)
+  (global-set-key (kbd "C-x C-k k") 'kill-buffer)
+#+END_SRC

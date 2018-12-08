@@ -4,8 +4,6 @@ set global scrolloff 4,0
 
 colorscheme gruvbox
 
-add-highlighter global/ number-lines
-
 map global user y '<a-|>xclip -i -selection clipboard<ret>'
 map global user p '!xclip -o -selection clipboard<ret>'
 
@@ -14,7 +12,6 @@ map global insert <tab> '<a-;><gt>'
 map global insert <s-tab> '<a-;><lt>'
 
 hook global BufWritePre .* %{ try %{ execute-keys -draft \%s\h+$<ret>d } }
-# hook global BufWritePre .*\..* %{ try %{ execute-keys -draft \%@ } }
 
 # Atomic soft tabs
 hook global InsertDelete ' ' %{ try %{
