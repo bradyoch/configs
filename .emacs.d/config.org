@@ -44,12 +44,6 @@ Remove unneeded gui elements from emacs
         (scroll-bar-mode -1)))
 #+END_SRC
 
-Add a border around the frame to look nice
-
-#+BEGIN_SRC emacs-lisp
-  (set-frame-parameter nil 'internal-border-width 22)
-#+END_SRC
-
 Display the column number in the bar
 
 #+BEGIN_SRC emacs-lisp
@@ -64,16 +58,25 @@ Remove unneeded minor modes from the bar
               (setq minor-mode-alist nil)))
 #+END_SRC
 
-** Font
+** Frame Variables
 
 Setup the font on windows and linux
 
 #+BEGIN_SRC emacs-lisp
   (cond
    ((eq window-system 'x)
-    (set-frame-font (font-spec :family "Fira Code" :size 10 :antialias t)))
+    (set-frame-font (font-spec :family "Fira Code" :size 10 :antialias t) nil t))
    ((eq window-system 'w32)
-    (set-frame-font (font-spec :family "Consolas" :size 10))))
+    (set-frame-font (font-spec :family "Consolas" :size 10) nil t)))
+#+END_SRC
+
+Add a border around the frame to look nice
+
+#+BEGIN_SRC emacs-lisp
+  (set-frame-parameter nil 'internal-border-width 22)
+  (add-hook 'after-make-frame-functions
+            (lambda (frame)
+              (set-frame-parameter frame 'internal-border-width 22)))
 #+END_SRC
 
 ** Startup
@@ -93,14 +96,6 @@ Scroll smoother with the mouse wheel
         mouse-wheel-scroll-amount '(1 ((shift) . 1) ((control . nil)))
         mouse-wheel-progressive-speed nil)
 #+END_SRC
-** Theme
-
-Load a reasonable theme
-
-#+BEGIN_SRC emacs-lisp
-  (load-theme 'misterioso t)
-#+END_SRC
-
 * Format Options
 ** No tabs
 
@@ -135,6 +130,40 @@ Require use-package.el for further package installation
   (setq use-package-always-ensure t)
 #+END_SRC
 
+** God Mode
+
+Use God mode for better keybindings
+
+#+BEGIN_SRC emacs-lisp
+  (use-package god-mode
+    :if nil
+    :init
+    (setq god-exempt-major-modes nil
+          god-exempt-predicates nil)
+    :bind (("<escape>" . god-mode-all)
+           ("C-x C-0" . delete-window)
+           ("C-x C-1" . delete-other-windows)
+           ("C-x C-2" . split-window-below)
+           ("C-x C-3" . split-window-right)
+           ("C-`" . keyboard-quit)
+           :map god-local-mode-map
+           ("z" . repeat)
+           ("i" . god-local-mode))
+    :config (god-mode-all))
+#+END_SRC
+
+Setup some nice visual functions
+
+#+BEGIN_SRC emacs-lisp
+  (defun brady/update-cursor ()
+    (setq cursor-type (if (or god-local-mode buffer-read-only)
+                          'box
+                        'bar)))
+
+  (add-hook 'god-mode-enabled-hook 'brady/update-cursor)
+  (add-hook 'god-mode-disabled-hook 'brady/update-cursor)
+#+END_SRC
+
 ** Company Mode
 
 Use company mode for better completion
@@ -144,20 +173,58 @@ Use company mode for better completion
     :config
     (global-company-mode))
 #+END_SRC
-* Keybindings
+** Gruvbox theme
 
-Let's steal the leader key idea from vim
+Use a better theme
 
 #+BEGIN_SRC emacs-lisp
-  (defvar-local leader "S-SPC ")
-
-  (global-set-key (kbd (concat leader "x f")) 'find-file)
-  (global-set-key (kbd (concat leader "x s")) 'save-buffer)
+  (use-package gruvbox-theme
+    :config
+    (load-theme 'gruvbox t))
 #+END_SRC
 
-Misc. keybindings
+** Org Mode
+
+Customizations for org mode
 
 #+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "C-x k") 'kill-this-buffer)
-  (global-set-key (kbd "C-x C-k k") 'kill-buffer)
+  (setq org-support-shift-select t)
+#+END_SRC
+
+** Dired Mode
+
+Special version of dired
+
+#+BEGIN_SRC emacs-lisp
+  (require 'dired-x)
+  (setq-default dired-omit-files-p t)
+  (setq dired-omit-files (concat dired-omit-files "\\|^\\..+$"))
+#+END_SRC
+
+** Ido Mode
+
+Use ido mode for completion
+
+#+BEGIN_SRC emacs-lisp
+  (setq ido-enable-flex-matching t
+        ido-everywhere t)
+  (ido-mode 1)
+#+END_SRC
+
+** Expand Region
+
+Expand region to gradually select more and more text
+
+#+BEGIN_SRC emacs-lisp
+  (use-package expand-region
+    :bind ("C-=" . er/expand-region))
+#+END_SRC
+
+* Keybindings
+
+** Misc Keybindings
+
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-x C-k") 'kill-this-buffer)
+  (global-set-key (kbd "C-x C-SPC k") 'kill-buffer)
 #+END_SRC

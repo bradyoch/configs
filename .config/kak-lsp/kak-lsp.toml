@@ -1,0 +1,17 @@
+verbosity = 2
+
+[server]
+# exit session if no requests were received during given period in seconds
+# works only in unix sockets mode (-s/--session)
+# set to 0 to disable
+timeout = 1800 # seconds = 30 minutes
+
+[language.go]
+extensions = ["go"]
+roots = ["Gopkg.toml", "go.mod", ".git", ".hg"]
+command = "go-langserver"
+args = ["-mode", "stdio"]
+
+[language.go.initialization_options]
+formatTool = "gofmt"
+gocodeCompletionEnabled = true

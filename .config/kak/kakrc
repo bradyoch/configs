@@ -8,8 +8,19 @@ map global user y '<a-|>xclip -i -selection clipboard<ret>'
 map global user p '!xclip -o -selection clipboard<ret>'
 
 # Indent with only spaces
-map global insert <tab> '<a-;><gt>'
+map global insert <tab> '<a-;><a-gt>'
 map global insert <s-tab> '<a-;><lt>'
+
+# But let tab still be used with completions
+hook global InsertCompletionShow .* %{ try %{
+  execute-keys -draft 'h<a-K>\h<ret>'
+  map window insert <tab> <c-n>
+  map window insert <s-tab> <c-p>
+}}
+hook global InsertCompletionHide .* %{
+  unmap window insert <tab> <c-n>
+  unmap window insert <s-tab> <c-p>
+}
 
 hook global BufWritePre .* %{ try %{ execute-keys -draft \%s\h+$<ret>d } }
 
@@ -17,3 +28,9 @@ hook global BufWritePre .* %{ try %{ execute-keys -draft \%s\h+$<ret>d } }
 hook global InsertDelete ' ' %{ try %{
   execute-keys -draft 'h<a-h><a-k>\A\h+\z<ret>i<space><esc><lt>'
 }}
+
+# Add line numbers
+addhl global/linum number-lines -hlcursor -separator ' '
+
+# Set up the language server
+eval %sh{ kak-lsp --kakoune -s $kak_session }
