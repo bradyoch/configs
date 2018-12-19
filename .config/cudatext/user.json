@@ -1,0 +1,19 @@
+{
+  "font_name__linux": "Fira Code",
+  "font_size__linux": 8,
+
+  "tab_spaces": true,
+  "tab_size": 2,
+  "indent_width": 0,
+
+  "saving_trim_spaces": true,
+  "saving_trim_final_empty": true,
+  "saving_force_final_eol": true,
+
+  "newdoc_ends": 1,
+
+  "minimap_show": true,
+  "ui_menu_show": false,
+
+  "pylib__linux": "libpython3.7m.so"
+}

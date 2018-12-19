@@ -1,42 +1,51 @@
 if has("win32")
-	call plug#begin('~/AppData/Local/nvim/plugged')
+  call plug#begin('~/AppData/Local/nvim/plugged')
 else
-	call plug#begin('~/.local/share/nvim/plugged')
+  call plug#begin('~/.local/share/nvim/plugged')
 endif
 
-Plug 'itchyny/lightline.vim'
+  Plug 'itchyny/lightline.vim'
 
-Plug 'scrooloose/nerdtree'
+  Plug 'scrooloose/nerdtree'
 
-Plug 'godlygeek/tabular'
+  Plug 'godlygeek/tabular'
 
-Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-commentary'
+  Plug 'tpope/vim-commentary'
+  Plug 'tpope/vim-surround'
 
-Plug 'bronson/vim-trailing-whitespace'
+  Plug 'bronson/vim-trailing-whitespace'
 
-Plug 'morhetz/gruvbox'
+  Plug 'morhetz/gruvbox'
 
-Plug 'ElmCast/elm-vim'
+  Plug 'Shougo/deoplete.nvim', { 'do' : 'UpdateRemotePlugins' }
 
 call plug#end()
 
-set termguicolors
-colo gruvbox
-set background=dark
+let g:deoplete#enable_at_startup = 1
 
 set nocompatible
+
 syntax enable
 filetype plugin indent on
+set mouse=a
+
+let g:mapleader = "\<space>"
+
+nnoremap <leader>w <c-w>
+nnoremap <leader>ct :NERDTreeToggle<cr>
+
+set termguicolors
+
+set background=dark
+colo gruvbox
 
 set number
 set linebreak
 set showmatch
 set novisualbell
 
-set modeline
-
 set cursorline
+set colorcolumn=80
 
 set nohlsearch
 set smartcase
@@ -48,11 +57,12 @@ set expandtab
 set shiftwidth=2
 set smarttab
 set softtabstop=2
+set tabstop=2
 
 set ruler
 set ff=unix
 
-set scrolloff=2
+set scrolloff=4
 
 set undolevels=1000
 set backspace=indent,eol,start
