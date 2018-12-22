@@ -5,10 +5,12 @@
   (tool-bar-mode -1)
   (scroll-bar-mode -1))
 
+(setq visible-bell t)
+(global-display-line-numbers-mode 1)
+
 (column-number-mode 1)
 
-(modify-all-frames-parameters (list (cons 'internal-border-width 10)
-                                    (cons 'cursor-type 'bar)))
+(modify-all-frames-parameters (list (cons 'internal-border-width 10)))
 
 (add-hook 'after-init-hook
 	        (lambda ()
@@ -26,7 +28,7 @@
  ((eq window-system 'x)
   (set-frame-font (font-spec :family "Hack" :size 10) nil t))
  ((eq window-system 'w32)
-  (set-frame-font (font-spec :family "Consolas" :size 10) nil t)))
+  (set-frame-font (font-spec :family "Consolas" :size 12) nil t)))
 
 ;; Move custom info to its own file
 
@@ -44,7 +46,7 @@
 ;; Better scrolling
 
 (setq scroll-conservatively 1000
-      mouse-wheel-scroll-amount '(1 ((shift) . 1) ((control . nil)))
+      mouse-wheel-scroll-amount '(2 ((shift) . 1) ((control . nil)))
       mouse-wheel-progressive-speed nil)
 
 ;; Consistent saving
@@ -85,12 +87,12 @@
   (package-install 'use-package))
 (require 'use-package)
 
-;; Setup all the packages we want
+;; Setup all the packages
 
 (setq use-package-always-ensure t)
 
 (use-package gruvbox-theme
-  :config (load-theme 'gruvbox t))
+  :config (load-theme 'gruvbox-light-soft t))
 
 (use-package company
   :config
@@ -99,9 +101,21 @@
 (use-package yasnippet
   :init (yas-global-mode 1))
 
+(use-package ivy
+  :config (setq ivy-use-selectable-prompt t)
+  :init (ivy-mode 1))
+
+(use-package counsel
+  :bind
+  ("C-c i" . counsel-imenu)
+  ("C-s" . swiper))
+
 (use-package magit
   :bind
   ("C-x g" . magit-status))
+
+(use-package neotree
+  :bind ("<f8>" . neotree-toggle))
 
 (use-package which-key
   :config (which-key-mode 1))
@@ -109,15 +123,15 @@
 (use-package go-mode
   :mode "\\*.go\\'")
 
+(load-file (concat (directory-file-name user-emacs-directory) "/escape-rsi.el"))
+(global-esc-mode)
+
 ;; Lastly, start emacs in server mode
 
 (require 'server)
 (unless (server-running-p)
   (server-start))
 
-;; Some misc keybindings
-
-(global-set-key (kbd "C-x k") 'kill-this-buffer)
-(global-set-key (kbd "C-x C-k k") 'kill-buffer)
+;; Misc unset annoying mouse bindings
 
 (global-unset-key (kbd "<mouse-2>"))
