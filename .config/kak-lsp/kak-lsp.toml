@@ -6,12 +6,30 @@ verbosity = 2
 # set to 0 to disable
 timeout = 1800 # seconds = 30 minutes
 
-[language.go]
-extensions = ["go"]
-roots = ["Gopkg.toml", "go.mod", ".git", ".hg"]
-command = "go-langserver"
-args = ["-mode", "stdio"]
+[language.c_cpp]
+filetypes = ["c", "cpp"]
+roots = ["compile_commands.json", ".git"]
+command = "clangd"
 
-[language.go.initialization_options]
-formatTool = "gofmt"
-gocodeCompletionEnabled = true
+[language.python]
+filetypes = ["python"]
+roots = ["requirements.txt", "setup.py", ".git", ".hg"]
+command = "pyls"
+
+[language.go]
+filetypes = ["go"]
+roots = ["Gopkg.toml", "go.mod", ".git", ".hg"]
+command = "/home/brady/.go/bin/go-langserver"
+args = ["-mode", "stdio", "-gocodecompletion"]
+
+[language.bash]
+filetypes = ["sh"]
+roots = [".git", ".hg"]
+command = "bash-language-server"
+args = ["start"]
+
+[language.ocaml]
+filetypes = ["ocaml"]
+roots = ["Makefile", "opam", "*.opam"]
+command = "/home/brady/.node/bin/ocaml-language-server"
+args = ["stdio"]

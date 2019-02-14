@@ -1,0 +1,17 @@
+Config
+  { font = "xft:Hack:style=Bold:size=8"
+  , bgColor = "#333333"
+  , fgColor = "#cccccc"
+  , position = TopW L 100
+  , commands =
+    [ Run Weather "KGNV" ["-t","<tempC>C","-L","12","-H","28","--normal","green","--high","red","--low","lightblue"] 36000
+    , Run Date "%A %B %d %I:%M %p" "date" 10
+    , Run BatteryP ["BAT1"] ["-t", "Bat: <left>% (<timeleft>)"] 60
+    , Run Wireless "wlp9s0f0" ["-t", "<essid> (<quality>%)"] 60
+    , Run ComX "pamixer" ["--get-volume"] "N/A" "" 31
+    , Run StdinReader
+    ]
+  , sepChar = "%"
+  , alignSep = "}{"
+  , template = "%StdinReader% } <fc=#ee9a00>%date%</fc> { %battery% | Vol: %pamixer% | %wlp9s0f0wi% | %KGNV%"
+  }

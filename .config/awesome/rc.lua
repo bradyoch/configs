@@ -43,7 +43,7 @@ end
 beautiful.init(awful.util.getdir("config") .. "/themes/custom/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
-terminal = "termite"
+terminal = "kitty"
 editor = os.getenv("EDITOR") or "nvim"
 editor_cmd = terminal .. " -e " .. editor
 
@@ -57,6 +57,7 @@ modkey = "Mod4"
 -- Table of layouts to cover with awful.layout.inc, order matters.
 awful.layout.layouts = {
     awful.layout.suit.tile,
+    awful.layout.suit.fair,
     awful.layout.suit.spiral.dwindle,
     awful.layout.suit.floating,
 }
@@ -123,6 +124,12 @@ local get_vol = function()
 end
 
 get_vol()
+
+-- Create WiFi Widget
+mywifi = awful.widget.watch('nmcli general', 61,
+  function(widget, out)
+    widget:set_text("WIFI: "..string.match(out, "\n([a-z]+) "))
+  end)
 
 mysep= wibox.widget.textbox(" | " )
 
@@ -225,6 +232,8 @@ awful.screen.connect_for_each_screen(function(s)
         },
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
+            mywifi,
+            mysep,
             myvol,
             mysep,
             mybatt,
@@ -402,7 +411,12 @@ clientkeys = gears.table.join(
             c.maximized_horizontal = not c.maximized_horizontal
             c:raise()
         end ,
-        {description = "(un)maximize horizontally", group = "client"})
+        {description = "(un)maximize horizontally", group = "client"}),
+    awful.key({ modkey }, "y",
+       function (c)
+         c.sticky = not c.sticky
+       end,
+       {description = "toggle client sticky", group = "client"})
 )
 
 -- Bind all key numbers to tags.
@@ -510,10 +524,6 @@ awful.rules.rules = {
     { rule_any = {type = { "normal", "dialog" }
       }, properties = { titlebars_enabled = false }
     },
-
-    -- Set Firefox to always map on the tag named "2" on screen 1.
-    -- { rule = { class = "Firefox" },
-    --   properties = { screen = 1, tag = "2" } },
 }
 -- }}}
 

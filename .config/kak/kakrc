@@ -1,15 +1,40 @@
+#
+# Global Variables
+#
+
 set global tabstop 2
 set global indentwidth 2
-set global scrolloff 4,0
+set global scrolloff 4,1
 
 colorscheme gruvbox
 
-map global user y '<a-|>xclip -i -selection clipboard<ret>'
-map global user p '!xclip -o -selection clipboard<ret>'
+#
+# Convenience Functions
+#
+
+# copy and paste from the x11 buffer
+map -docstring 'X11 copy' \
+  global user y '<a-|>xclip -i -selection clipboard<ret>'
+
+map -docstring 'X11 paste' \
+  global user p '!xclip -o -selection clipboard<ret>'
+
+# comment a line
+map -docstring 'comment line' \
+  global user c ': comment-line<ret>'
+
+#
+# Formating
+#
 
 # Indent with only spaces
 map global insert <tab> '<a-;><a-gt>'
 map global insert <s-tab> '<a-;><lt>'
+
+# Unless we're in a makefile
+hook global BufSetOption filetype=makefile %{
+  set buffer indentwidth 0
+}
 
 # But let tab still be used with completions
 hook global InsertCompletionShow .* %{ try %{
@@ -22,6 +47,7 @@ hook global InsertCompletionHide .* %{
   unmap window insert <s-tab> <c-p>
 }
 
+# Remove trailing whitespace
 hook global BufWritePre .* %{ try %{ execute-keys -draft \%s\h+$<ret>d } }
 
 # Atomic soft tabs
@@ -29,8 +55,32 @@ hook global InsertDelete ' ' %{ try %{
   execute-keys -draft 'h<a-h><a-k>\A\h+\z<ret>i<space><esc><lt>'
 }}
 
+#
+# Language Specific Configs
+#
+
+hook global BufSetOption filetype=(c|cpp) %{
+  set buffer formatcmd 'clang-format -style=LLVM'
+}
+
+#
+# Highlighters
+#
+
 # Add line numbers
 addhl global/linum number-lines -hlcursor -separator ' '
 
+# Add word wrap for asciidoc and markdown
+hook global BufSetOption filetype=(makefile|asciidoc) %{
+  addhl buffer/wrap wrap -word
+}
+
+#
+# Language Server
+#
+
 # Set up the language server
 eval %sh{ kak-lsp --kakoune -s $kak_session }
+lsp-enable
+lsp-auto-signature-help-enable
+map global normal \' ': enter-user-mode lsp<ret>'

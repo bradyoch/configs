@@ -1,2 +1,5 @@
-rofi.theme: /usr/share/rofi/themes/Pop-Dark.rasi
+rofi.theme: ~/.config/rofi/Custom.rasi
 rofi.font: Hack 10
+rofi.fullscreen: true
+rofi.padding: 100
+rofi.hide-scrollbar: false 

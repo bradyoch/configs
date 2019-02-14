@@ -13,15 +13,31 @@ endif
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-surround'
 
+  Plug 'Raimondi/delimitMate'
+
   Plug 'bronson/vim-trailing-whitespace'
 
   Plug 'morhetz/gruvbox'
+  Plug 'arcticicestudio/nord-vim'
 
-  Plug 'Shougo/deoplete.nvim', { 'do' : 'UpdateRemotePlugins' }
+  Plug 'dylon/vim-antlr'
+  Plug 'ElmCast/elm-vim'
+
+  Plug 'w0rp/ale'
 
 call plug#end()
 
-let g:deoplete#enable_at_startup = 1
+au BufRead, BufNewFile *.g set filetype=antlr3
+au BufRead, BufNewFile *.g4 set filetype=antlr4
+
+let g:mapleader = "\<space>"
+
+nnoremap <leader>w <c-w>
+nnoremap <silent> <F8> :NERDTreeToggle<cr>
+
+let g:lightline = {
+      \ 'colorscheme': 'gruvbox',
+      \ }
 
 set nocompatible
 
@@ -29,15 +45,12 @@ syntax enable
 filetype plugin indent on
 set mouse=a
 
-let g:mapleader = "\<space>"
-
-nnoremap <leader>w <c-w>
-nnoremap <leader>ct :NERDTreeToggle<cr>
-
 set termguicolors
 
-set background=dark
 colo gruvbox
+set background=dark
+
+set hidden
 
 set number
 set linebreak
