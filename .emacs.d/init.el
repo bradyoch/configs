@@ -10,7 +10,7 @@
                                 (left-fringe . 0)
                                 (right-fringe . 0)))
 
-; (setq-default line-spacing .15)
+(setq-default line-spacing .1)
 (cond
  ((eq window-system 'x)
   (set-frame-font (font-spec :family "Hack" :size 10) nil t))
@@ -23,6 +23,7 @@
   (concat (directory-file-name user-emacs-directory) "/" name))
 
 ;; Setup line numbers only for text files
+(require 'display-line-numbers)
 (setq display-line-numbers-width-start 3)
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
 (add-hook 'text-mode-hook 'display-line-numbers-mode)
@@ -36,7 +37,8 @@
 
 ;; Smoother scrolling
 (setq scroll-conservatively 1000
-      mouse-wheel-scroll-amount '(3 ((shift) . 1) ((control . nil)))
+			scroll-preserve-screen-position nil
+      mouse-wheel-scroll-amount '(1 ((shift) . 1) ((control . nil)))
       mouse-wheel-progressive-speed nil
       scroll-margin 2)
 
@@ -48,6 +50,7 @@
 
 ;; Clear the minor mode display alist
 (defun brady/wipe-minor-modes ()
+	(interactive)
   (setq minor-mode-alist nil))
 (add-hook 'after-init-hook 'brady/wipe-minor-modes)
 
@@ -60,11 +63,12 @@
   (delete-trailing-whitespace 0)
   (set-buffer-file-coding-system 'unix))
 (add-hook 'before-save-hook 'brady/enforce-styling)
+(setq require-final-newline 1)
 (setq sentence-end-double-space nil)
 
 ;; Don't use tabs
-(setq indent-tabs-mode nil
-      tab-width 2)
+(setq-default indent-tabs-mode nil)
+(setq-default tab-width 2)
 
 ;; Put the custom elements in their own files
 (let ((custom (brady/config-file-string "custom.el")))
@@ -73,9 +77,9 @@
       (load-file custom)))
 
 ;; Match parentheses
-(electric-pair-mode 1)
 (show-paren-mode 1)
-(setq show-paren-delay .05)
+(setq show-paren-delay 0)
+(electric-pair-mode)
 
 ;; Setup the package manager
 (require 'package)
@@ -88,27 +92,26 @@
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
+(require 'use-package)
 
 (setq use-package-always-ensure t)
 
-(use-package nord-theme
-  :if nil
+(use-package flycheck
   :config
-  (load-theme 'nord t))
+  (global-flycheck-mode)
+  (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc)))
 
 (use-package gruvbox-theme
   :config
   (load-theme 'gruvbox t))
-
-(use-package which-key
-  :config (which-key-mode))
 
 (use-package company
   :config (global-company-mode 1))
 
 (use-package ivy
   :config
-  (setq ivy-use-selectable-prompt t)
+  (setq ivy-use-selectable-prompt t
+				ivy-use-virtual-buffers t)
   (ivy-mode 1))
 
 (use-package counsel
@@ -116,7 +119,8 @@
   (("C-s" . swiper))
   :config (counsel-mode 1))
 
-(use-package magit)
+(use-package magit
+	:bind ("C-x g" . magit-status))
 
 (use-package neotree
   :bind ("<f8>" . neotree-toggle))
@@ -125,19 +129,27 @@
   :bind ("C-=" . er/expand-region))
 
 (use-package multiple-cursors
+  :init (global-unset-key (kbd "M-<down-mouse-1>"))
   :bind
-  (("M-<down>" . mc/mark-next-lines)
-   ("M-<up>" . mc/mark-previous-lines))
+  (("M-S-<down>" . mc/mark-next-lines)
+   ("M-S-<up>" . mc/mark-previous-lines)
+   ("M-<mouse-1>" . mc/add-cursor-on-click))
   :config
   (multiple-cursors-mode 1))
+
+(use-package move-text
+	:config (move-text-default-bindings))
+
+(use-package god-mode)
+
+(use-package modalka)
 
 (use-package go-mode
   :mode "\\.go\\'"
   :config
-  (setenv "GOPATH" "/home/brady/.go"))
+  (if (eq window-system 'x) (setenv "GOPATH" "/home/brady/.go")))
 
-(use-package caml
-  :mode "\\.ml\\'")
+(use-package tuareg)
 
 (use-package lua-mode
   :mode "\\.lua\\'")
@@ -147,24 +159,18 @@
 
 (use-package antlr-mode
   :ensure nil
-  :mode "\\.g4\\'")
+  :mode "\\.g4?\\'")
 
 (use-package elm-mode
   :mode "\\.elm\\'")
 
-(use-package rjsx-mode
-  :mode "\\.jsx\\'")
-
+(use-package js2-mode
+  :mode "\\.jsx?\\'")
 (setq-default js-indent-level 2)
 
-(use-package lsp-mode
-  :commands lsp
-  :init
-  (add-hook 'c-mode-hook 'lsp)
-  (add-hook 'go-mode-hook 'lsp))
+;; Bind some more keybindings
 
-(use-package lsp-ui :commands lsp-ui-mode)
-(use-package company-lsp :commands company-lsp)
+(global-set-key (kbd "<C-tab>") 'other-window)
 
 ;; Setup the emacs server for emacs clients
 (require 'server)
