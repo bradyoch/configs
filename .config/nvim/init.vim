@@ -14,11 +14,30 @@ set backspace=indent,eol,start
 " Plugins
 "
 
+if empty(glob('~/.local/share/nvim/site/autoload/plug.vim'))
+  silent !curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+call plug#begin('~/.local/share/nvim/plugged')
+
+  Plug 'rakr/vim-one'
+  Plug 'itchyny/lightline.vim'
+
+call plug#end()
+
+let g:lightline = {
+      \ 'colorscheme': 'one'
+      \ }
+
 "
 " Visual Settings
 "
 
 set termguicolors
+set background=dark
+color one
 
 set number " show line numbers
 set linebreak " word break
