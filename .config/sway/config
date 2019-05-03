@@ -17,12 +17,15 @@ set $right l
 set $term termite
 # Your preferred application launcher
 # Note: it's recommended that you pass the final command to sway
-set $menu dmenu_path | dmenu | xargs swaymsg exec
+set $menu dmenu_path | dmenu -fn "Source Code Pro:size=10" -nb "#333" | xargs swaymsg exec
+
+set $lock 'swaylock -i ~/Pictures/wallpapers/1.jpg'
 
 ### Output configuration
 #
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
-output * bg ~/Pictures/wallpapers/background-1.jpg fill
+output * bg ~/Pictures/wallpapers/1.jpg fill
+
 #
 # Example configuration:
 #
@@ -43,6 +46,7 @@ output * bg ~/Pictures/wallpapers/background-1.jpg fill
 # This will lock your screen after 300 seconds of inactivity, then turn off
 # your displays after another 300 seconds, and turn your screens back on when
 # resumed. It will also lock your screen before your computer goes to sleep.
+exec swayidle -w before-sleep $lock
 
 ### Input configuration
 #
@@ -223,8 +227,10 @@ bar {
 gaps inner 7
 default_border pixel 3
 
+focus_follows_mouse no
+
 # Sway lock
-bindsym Ctrl+Alt+l exec swaylock -i ~/Pictures/wallpapers/background-1.jpg
+bindsym Ctrl+Alt+l exec $lock
 
 # Audio Settings
 bindsym XF86AudioRaiseVolume exec pamixer -u -i 5

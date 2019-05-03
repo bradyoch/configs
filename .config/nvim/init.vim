@@ -25,17 +25,42 @@ call plug#begin('~/.local/share/nvim/plugged')
   Plug 'rakr/vim-one'
   Plug 'itchyny/lightline.vim'
 
+  Plug 'Shougo/deoplete.nvim', { 'do' : ':UpdateRemotePlugins' }
+  Plug 'autozimu/LanguageClient-neovim', {
+    \ 'branch': 'next',
+    \ 'do': 'bash install.sh',
+    \ }
+
 call plug#end()
 
 let g:lightline = {
       \ 'colorscheme': 'one'
       \ }
+let g:deoplete#enable_at_startup=1
+
+let g:LanguageClient_serverCommands = {
+    \ 'go': ['gopls']
+    \ }
+
+nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
+nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
+
+"
+" Autocommands
+"
+
+augroup Vimrc
+  au!
+  autocmd BufWritePre *.go :call LanguageClient#textDocument_formatting_sync()
+augroup END " Vimrc
 
 "
 " Visual Settings
 "
 
-set termguicolors
+if $TERM != 'linux'
+  set termguicolors
+endif
 set background=dark
 color one
 
