@@ -14,9 +14,9 @@ local wallpaper_path = os.getenv("HOME").."/Pictures/wallpapers/"
 
 local theme = {}
 
-theme.font          = "Hack Bold 8"
+theme.font          = "Source Code Pro Bold 8"
 
-theme.wallpaper = wallpaper_path.."background-1.jpg"
+theme.wallpaper = wallpaper_path.."1.jpg"
 
 theme.bg_normal     = "#303030"
 theme.bg_focus      = "#535d6c"
