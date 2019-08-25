@@ -17,13 +17,15 @@ set backspace=indent,eol,start
 if empty(glob('~/.local/share/nvim/site/autoload/plug.vim'))
   silent !curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs
     \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
 call plug#begin('~/.local/share/nvim/plugged')
 
   Plug 'rakr/vim-one'
   Plug 'itchyny/lightline.vim'
+
+  Plug 'tpope/vim-commentary'
+  Plug 'tpope/vim-surround'
 
   Plug 'Shougo/deoplete.nvim', { 'do' : ':UpdateRemotePlugins' }
   Plug 'autozimu/LanguageClient-neovim', {
@@ -39,11 +41,19 @@ let g:lightline = {
 let g:deoplete#enable_at_startup=1
 
 let g:LanguageClient_serverCommands = {
-    \ 'go': ['gopls']
+    \ 'c': ['clangd'],
+    \ 'cpp': ['clangd'],
+    \ 'go': ['gopls'],
+    \ 'python': ['pyls'],
     \ }
 
 nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
 nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
+nnoremap <F5> :call LanguageClient_contextMenu()<CR>
+
+let $FZF_DEFAULT_COMMAND = 'fd --type f'
+nnoremap <Leader>f :FZF<CR>
+nnoremap <Leader><Space> <C-w>
 
 "
 " Autocommands
@@ -51,7 +61,8 @@ nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
 
 augroup Vimrc
   au!
-  autocmd BufWritePre *.go :call LanguageClient#textDocument_formatting_sync()
+  autocmd BufWritePre *.go,*.c,*.cpp,*.cc :call LanguageClient#textDocument_formatting_sync()
+  autocmd BufWritePre * :TrimWhitespace
 augroup END " Vimrc
 
 "
@@ -93,3 +104,14 @@ set tabstop=2 " 2 spaces
 set shiftwidth=0 " sw = ts
 
 set ruler " show line and col number
+
+"
+" Functions
+"
+
+function! TrimTrailingWhitespace()
+  let l:save = winsaveview()
+  %s/\s\+$//e
+  :call winrestview(l:save)
+endfunction "TrimTrailingWhitespace
+command! TrimWhitespace call TrimTrailingWhitespace()
