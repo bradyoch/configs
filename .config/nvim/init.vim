@@ -51,7 +51,8 @@ nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
 nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
 nnoremap <F5> :call LanguageClient_contextMenu()<CR>
 
-let $FZF_DEFAULT_COMMAND = 'fd --type f'
+source /usr/share/doc/fzf/examples/fzf.vim
+let $FZF_DEFAULT_COMMAND = 'fdfind --type f'
 nnoremap <Leader>f :FZF<CR>
 nnoremap <Leader><Space> <C-w>
 

@@ -1,0 +1,4 @@
+set editing-mode vi
+set show-mode-in-prompt 1
+set vi-cmd-mode-string "[C] "
+set vi-ins-mode-string "[I] "
