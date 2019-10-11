@@ -24,6 +24,7 @@ call plug#begin('~/.local/share/nvim/plugged')
   Plug 'rakr/vim-one'
   Plug 'itchyny/lightline.vim'
 
+  Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-surround'
 
@@ -44,15 +45,15 @@ let g:LanguageClient_serverCommands = {
     \ 'c': ['clangd'],
     \ 'cpp': ['clangd'],
     \ 'go': ['gopls'],
-    \ 'python': ['pyls'],
+    \ 'python': ['~/.local/bin/pyls'],
     \ }
 
 nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
 nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
 nnoremap <F5> :call LanguageClient_contextMenu()<CR>
 
-source /usr/share/doc/fzf/examples/fzf.vim
-let $FZF_DEFAULT_COMMAND = 'fdfind --type f'
+" source /usr/share/doc/fzf/examples/fzf.vim
+let $FZF_DEFAULT_COMMAND = 'fd --type f'
 nnoremap <Leader>f :FZF<CR>
 nnoremap <Leader><Space> <C-w>
 
@@ -62,7 +63,7 @@ nnoremap <Leader><Space> <C-w>
 
 augroup Vimrc
   au!
-  autocmd BufWritePre *.go,*.c,*.cpp,*.cc :call LanguageClient#textDocument_formatting_sync()
+  autocmd BufWritePre *.py,*.go,*.c,*.cpp,*.cc :call LanguageClient#textDocument_formatting_sync()
   autocmd BufWritePre * :TrimWhitespace
 augroup END " Vimrc
 
@@ -99,12 +100,17 @@ set hidden " allow unsaved buffers
 set smartcase " ignore case in searches unless caps
 set ignorecase  " otherwise ignore
 set incsearch " search as I type
+set inccommand=nosplit " show command effect as it is typed
 
 set expandtab " use spaces
 set tabstop=2 " 2 spaces
 set shiftwidth=0 " sw = ts
 
 set ruler " show line and col number
+
+set updatetime=500
+
+let g:tex_flavor = 'latex'
 
 "
 " Functions
@@ -116,3 +122,8 @@ function! TrimTrailingWhitespace()
   :call winrestview(l:save)
 endfunction "TrimTrailingWhitespace
 command! TrimWhitespace call TrimTrailingWhitespace()
+
+function! DailyLog()
+  :e ~/Documents/log.txt
+endfunction " DailyLog
+command! DailyLog call DailyLog()
