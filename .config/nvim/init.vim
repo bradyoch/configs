@@ -1,6 +1,7 @@
 "
 " Basic Vim Settings
 "
+
 set nocompatible
 
 syntax enable
@@ -21,6 +22,8 @@ endif
 
 call plug#begin('~/.local/share/nvim/plugged')
 
+  Plug 'junegunn/fzf.vim'
+
   Plug 'rakr/vim-one'
   Plug 'itchyny/lightline.vim'
 
@@ -28,33 +31,38 @@ call plug#begin('~/.local/share/nvim/plugged')
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-surround'
 
-  Plug 'Shougo/deoplete.nvim', { 'do' : ':UpdateRemotePlugins' }
+  Plug 'editorconfig/editorconfig-vim'
+
+  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugin' }
   Plug 'autozimu/LanguageClient-neovim', {
-    \ 'branch': 'next',
-    \ 'do': 'bash install.sh',
-    \ }
+        \ 'branch': 'next',
+        \ 'do': 'bash install.sh'
+        \ }
 
 call plug#end()
 
 let g:lightline = {
       \ 'colorscheme': 'one'
       \ }
-let g:deoplete#enable_at_startup=1
+
+let g:python3_host_prog = '~/.virtualenvs/pyls/bin/python'
+let g:deoplete#enable_at_startup = 1
 
 let g:LanguageClient_serverCommands = {
-    \ 'c': ['clangd'],
-    \ 'cpp': ['clangd'],
-    \ 'go': ['gopls'],
-    \ 'python': ['~/.local/bin/pyls'],
-    \ }
+      \ 'python': ['~/.virtualenvs/pyls/bin/python', '-m', 'pyls']
+      \ }
 
-nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
-nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
-nnoremap <F5> :call LanguageClient_contextMenu()<CR>
-
-" source /usr/share/doc/fzf/examples/fzf.vim
 let $FZF_DEFAULT_COMMAND = 'fd --type f'
-nnoremap <Leader>f :FZF<CR>
+
+"
+" Keymappings
+"
+
+nnoremap Q <Nop>
+nnoremap Y y$
+
+nnoremap <Leader>f :Files<CR>
+nnoremap <Leader>r :Rg<CR>
 nnoremap <Leader><Space> <C-w>
 
 "
@@ -63,8 +71,7 @@ nnoremap <Leader><Space> <C-w>
 
 augroup Vimrc
   au!
-  autocmd BufWritePre *.py,*.go,*.c,*.cpp,*.cc :call LanguageClient#textDocument_formatting_sync()
-  autocmd BufWritePre * :TrimWhitespace
+  autocmd BufWritePre * :call TrimTrailingWhitespace()
 augroup END " Vimrc
 
 "
@@ -117,13 +124,8 @@ let g:tex_flavor = 'latex'
 "
 
 function! TrimTrailingWhitespace()
-  let l:save = winsaveview()
+  let l:save = getpos(".")
   %s/\s\+$//e
-  :call winrestview(l:save)
+  :call setpos(".", l:save)
 endfunction "TrimTrailingWhitespace
 command! TrimWhitespace call TrimTrailingWhitespace()
-
-function! DailyLog()
-  :e ~/Documents/log.txt
-endfunction " DailyLog
-command! DailyLog call DailyLog()
