@@ -1,18 +1,12 @@
-" 
-" Compatibility
 "
-
-" No vi compatibility mode
+" Basic Vim Settings
+"
 set nocompatible
 
-" Syntax highlighting on
 syntax enable
-filetype plugin on
-
-" Enable mouse
+filetype plugin indent on
 set mouse=a
 
-" Misc
 set undolevels=1000
 set backspace=indent,eol,start
 
@@ -27,39 +21,45 @@ endif
 
 call plug#begin('~/.local/share/nvim/plugged')
 
-  Plug 'junegunn/fzf.vim'
+  Plug 'NLKNguyen/papercolor-theme'
+  Plug 'itchyny/lightline.vim'
 
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-commentary'
-  Plug 'tpope/vim-surround'
+
+  Plug 'sheerun/vim-polyglot'
 
 call plug#end()
 
-" Plugin Settings
+let g:lightline = { 'colorscheme': 'PaperColor' }
+
+"
+" Keybindings
+"
+
+inoremap jf <Esc>
 
 let $FZF_DEFAULT_COMMAND = 'fd --type f'
+nnoremap <Leader>f :FZF<CR>
 
 "
-" Key Mappings
+" Autocommands
 "
 
-" Rebind jf to escape
-inoremap jf <ESC>
-
-nnoremap Q <Nop>
-nnoremap Y y$
-
-nnoremap <Leader>f :Files<CR>
-nnoremap <Leader>r :Rg<CR>
-nnoremap <Leader><Space> <C-w>
+augroup Vimrc
+  au!
+augroup END " Vimrc
 
 "
 " Visual Settings
 "
 
-" if $TERM != 'linux'
-"   set termguicolors
-" endif
+if $TERM != 'linux'
+  set termguicolors
+
+  set background=dark
+  colorscheme PaperColor
+endif
 
 set number " show line numbers
 set linebreak " word break
@@ -68,23 +68,32 @@ set showmatch " show matching brackets
 
 set novisualbell " don't beep
 
-set scrolloff=4 " leave 4 line buffer when scrolling
+set cursorline " show current line
+set colorcolumn=80 " show column 80 (long lines)
+
+set nohlsearch " don't show all search results
+
+set scrolloff=4 " start scrolling with 4 lines
 
 "
-" Other settings
+" Other Settings
 "
+
+set foldmethod=syntax
 
 set hidden " allow unsaved buffers
 
-set smartcase " ignore case in search unless search includes caps
-set ignorecase " ignore case otherwise
-set incsearch " search without pressing enter
-set inccommand=nosplit " show changes in replacement live
+set smartcase " ignore case in searches unless caps
+set ignorecase  " otherwise ignore
+set incsearch " search as I type
+set inccommand=nosplit " show command effect as it is typed
 
 set expandtab " use spaces
 set tabstop=2 " 2 spaces
 set shiftwidth=0 " sw = ts
 
-set ruler "show line and column number
+set ruler " show line and col number
 
 set updatetime=500
+
+let g:tex_flavor = 'latex'
