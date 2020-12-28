@@ -1,6 +1,7 @@
 "
 " Basic Vim Settings
 "
+
 set nocompatible
 
 syntax enable
@@ -21,23 +22,25 @@ endif
 
 call plug#begin('~/.local/share/nvim/plugged')
 
-  Plug 'NLKNguyen/papercolor-theme'
+  Plug 'morhetz/gruvbox'
   Plug 'itchyny/lightline.vim'
 
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-commentary'
+  Plug 'tpope/vim-surround'
+  Plug 'editorconfig/editorconfig-vim'
 
   Plug 'sheerun/vim-polyglot'
 
 call plug#end()
 
-let g:lightline = { 'colorscheme': 'PaperColor' }
+let g:lightline = { 'colorscheme': 'gruvbox' }
 
 "
 " Keybindings
 "
 
-inoremap jf <Esc>
+let mapleader = ' '
 
 let $FZF_DEFAULT_COMMAND = 'fd --type f'
 nnoremap <Leader>f :FZF<CR>
@@ -58,7 +61,7 @@ if $TERM != 'linux'
   set termguicolors
 
   set background=dark
-  colorscheme PaperColor
+  colorscheme gruvbox
 endif
 
 set number " show line numbers
@@ -79,7 +82,8 @@ set scrolloff=4 " start scrolling with 4 lines
 " Other Settings
 "
 
-set foldmethod=syntax
+" set foldmethod=syntax
+set nofoldenable
 
 set hidden " allow unsaved buffers
 
