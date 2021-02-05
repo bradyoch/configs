@@ -32,9 +32,29 @@ call plug#begin('~/.local/share/nvim/plugged')
 
   Plug 'sheerun/vim-polyglot'
 
+  Plug 'sbdchd/neoformat'
+  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+  Plug 'autozimu/LanguageClient-neovim', {
+        \ 'branch': 'next',
+        \ 'do': 'bash install.sh',
+        \ }
+  Plug 'junegunn/fzf.vim'
+
 call plug#end()
 
+let g:python3_host_prog = '/usr/bin/python3'
+
+let g:deoplete#enable_at_startup = 1
 let g:lightline = { 'colorscheme': 'gruvbox' }
+
+let g:LanguageClient_serverCommands = {
+      \ 'python': ['pyls'],
+      \ 'typescript': ['typescript-language-server', '--stdio'],
+      \ }
+
+let g:neoformat_basic_format_align = 0
+let g:neoformat_basic_format_retab = 0
+let g:neoformat_basic_format_trim = 1
 
 "
 " Keybindings
@@ -42,8 +62,20 @@ let g:lightline = { 'colorscheme': 'gruvbox' }
 
 let mapleader = ' '
 
+nnoremap Y y$
+nmap Q <Nop>
+inoremap jf <Esc>
+
 let $FZF_DEFAULT_COMMAND = 'fd --type f'
-nnoremap <Leader>f :FZF<CR>
+nnoremap <Leader>ff :Files<CR>
+nnoremap <Leader>fr :Rg<CR>
+nnoremap <Leader>w <C-w>
+
+nmap <F5> <Plug>(lcn-menu)
+nmap <silent>K <Plug>(lcn-hover)
+nmap <silent> gd <Plug>(lcn-definition)
+nmap <silent> <F2> <Plug>(lcn-rename)
+
 
 "
 " Autocommands
@@ -51,6 +83,7 @@ nnoremap <Leader>f :FZF<CR>
 
 augroup Vimrc
   au!
+  autocmd BufWritePre * undojoin | Neoformat
 augroup END " Vimrc
 
 "
